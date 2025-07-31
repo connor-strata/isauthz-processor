@@ -1,2 +1,4 @@
 # Ignore build directories and binaries
 isauthz-processor
+bin/
+target/
