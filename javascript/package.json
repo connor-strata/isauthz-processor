@@ -1,0 +1,17 @@
+{
+    "name": "isauthz-processor-js",
+    "version": "1.0.0",
+    "description": "Authorization processor in JavaScript",
+    "main": "main.js",
+    "bin": {
+        "isauthz-processor-js": "./main.js"
+    },
+    "scripts": {
+        "start": "node main.js"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "author": "",
+    "license": "MIT"
+}
