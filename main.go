@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -42,33 +43,35 @@ func main() {
 
 // processAuthorizationRequest processes the input map and returns authorization result
 func processAuthorizationRequest(input map[string]string) string {
-	// TODO: Implement authorization logic here
-	// This is where you would add your specific authorization processing
-
-	// Placeholder logic - you can replace this with your actual authorization logic
-	// For now, we'll just check if certain required fields are present
-
-	// Example: Check if required fields exist
-	if _, hasUser := input["user"]; !hasUser {
+	// Check if user is authenticated
+	authenticated, exists := input["azure.authenticated"]
+	if !exists || authenticated != "true" {
 		return "unauthorized"
 	}
 
-	if _, hasResource := input["resource"]; !hasResource {
-		return "unauthorized"
+	// Get user attributes
+	role := input["azure.role"]
+	department := input["azure.department"]
+	groups := input["azure.groups"]
+	email := input["azure.email"]
+
+	// Complex authorization logic based on multiple attributes
+
+	// Admin users are always authorized
+	if role == "admin" {
+		return "authorized"
 	}
 
-	if _, hasAction := input["action"]; !hasAction {
-		return "unauthorized"
+	// Engineering department developers are authorized
+	if department == "Engineering" && strings.Contains(groups, "developers") {
+		return "authorized"
 	}
 
-	// TODO: Add your actual authorization logic here
-	// This could involve:
-	// - Checking permissions in a database
-	// - Validating JWT tokens
-	// - Consulting policy engines
-	// - Checking role-based access control
-	// - etc.
+	// Users with @example.com email and user role are authorized
+	if strings.HasSuffix(email, "@example.com") && role == "user" {
+		return "authorized"
+	}
 
-	// For now, return authorized if all required fields are present
-	return "authorized"
+	// Default to unauthorized
+	return "unauthorized"
 }
